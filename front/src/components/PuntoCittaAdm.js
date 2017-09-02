@@ -12,7 +12,8 @@ class PuntoCittaAdm extends Component {
     super(props)
     this.state = {
       proposals: [],
-      contractInstance: null
+      contractInstance: null,
+      owner: null
     }
   }
 
@@ -31,6 +32,7 @@ class PuntoCittaAdm extends Component {
       console.error('Contract not deployed!');
       return;
     }
+    var _owner = await _contractInstance.owner();
     var _proposals = [];
     var _done = false;
     var i = 0;
@@ -45,14 +47,19 @@ class PuntoCittaAdm extends Component {
         _done = true;
       }
     }
-    console.log(_proposals);
     this.setState({
+      owner: _owner,
       contractInstance: _contractInstance,
       proposals: _proposals
     });
   }
 
   render() {
+    if (this.context.web3.web3.eth.defaultAccount !== undefined &&
+        this.state.owner !== null &&
+        this.context.web3.web3.eth.defaultAccount !== this.state.owner)
+      return null;
+
     var propItems = this.state.proposals.map(prop =>
       <Proposal isDetailed={false}
                 key={prop.index}
