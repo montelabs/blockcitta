@@ -177,6 +177,7 @@ class Master extends Component {
     return (
       <div>
         <div style={{marginLeft: 210}}>
+          <div id="react-no-print">
           <AppBar
           onLeftIconButtonTouchTap={this.handleTouchTapLeftIconButton}
           title={(errorMessage === null ) ? this.props.location.pathname : errorMessage}
@@ -184,6 +185,7 @@ class Master extends Component {
           style={styles.appBar}
           showMenuIconButton={false}
         />
+        </div>
           <div style={{marginTop: 73, marginLeft:60}}>
             {children}
           </div>
