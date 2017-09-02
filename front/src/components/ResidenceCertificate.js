@@ -65,7 +65,9 @@ class ResidenceCertificate extends Component {
     );
   }
 
- dataString = () => {
+  dataString = () => {
+    if (this.state.birthDate === null)
+      return '';
     var _data = this.state.name + '/' +
                 this.formatDate(this.state.birthDate) + '/' +
                 this.state.sex + '/' +
@@ -74,8 +76,9 @@ class ResidenceCertificate extends Component {
     return _data;
   }
 
-
   dataStringHash = () => {
+    if (this.state.birthDate === null)
+      return '';
     var _data = this.state.name + '/' +
                 this.formatDate(this.state.birthDate) + '/' +
                 this.state.sex + '/' +
@@ -151,7 +154,7 @@ class ResidenceCertificate extends Component {
 
   handleQRCodeScan(data){
     if (data !== null) {
-      let QRCodeData = data.split('-');
+      let QRCodeData = data.split('/');
       let newDate = QRCodeData[1].split('.');
       newDate = new Date(`${newDate[1]}.${newDate[0]}.${newDate[2]}`);
       this.setState({
@@ -305,7 +308,7 @@ class ResidenceCertificate extends Component {
           sex={this.state.sex}
           birthDate={(this.state.birthDate !== null) ? this.formatDate(this.state.birthDate) : null}
           address={this.state.address}
-          encodedString={'Dante-02.09.2017-M-Via 0, 6830, Chiasso'}
+          encodedString={this.dataStringHash()}
         />
       </div>
     )
