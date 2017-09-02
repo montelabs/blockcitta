@@ -70,8 +70,6 @@ class QRCode extends React.Component {
   update() {
 
     var {value, size, level, bgColor, fgColor, shiftTiles} = this.props;
-    if (shiftTiles === undefined)
-      shiftTiles = 2;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -98,7 +96,6 @@ class QRCode extends React.Component {
       let oldWidth = canvas.width;
       canvas.height += 4*shiftTiles*tileH;
       canvas.width += 4*shiftTiles*tileW;
-      console.log(canvas.height, canvas.width)
       ctx.scale(scale, scale);
       ctx.fillStyle = 'white'
 
