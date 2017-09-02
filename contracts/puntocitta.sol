@@ -11,7 +11,7 @@ contract PuntoCitta {
     REJECTED
   }
 
-  struct Proposal {
+  struct Request {
     address from;
     uint residentId;
     REQ_TYPE reqType;
@@ -20,10 +20,19 @@ contract PuntoCitta {
     uint index;
   }
 
+  struct LawProposal {
+    address from;
+    string description;
+    uint signatures;
+    uint index;
+  }
+
   address public owner;
   mapping (address => uint) residents;
-  Proposal[] public proposals;
+  Request[] public requests;
   mapping (string => bool) validHashes;
+  LawProposal[] public lawProposals;
+  mapping (uint => mapping (address => bool)) signedLawProposal;
  
   modifier onlyOwner() {
     require(msg.sender == owner);
@@ -35,9 +44,10 @@ contract PuntoCitta {
     _;
   }
 
-  event NewProposal(uint propIdx);
-  event ProposalResolved(uint propIdx);
-  event ProposalRejected(uint propIdx);
+  event NewRequest(uint propIdx);
+  event RequestResolved(uint propIdx);
+  event RequestRejected(uint propIdx);
+  event NewLawProposal(uint propIdx);
 
   function PuntoCitta() {
     owner = msg.sender;
@@ -48,28 +58,42 @@ contract PuntoCitta {
     residents[pubKey] = internalId;
   }
 
-  function addProposal(REQ_TYPE _type, string _dataHash)
+  function addRequest(REQ_TYPE _type, string _dataHash)
     onlyResident(msg.sender) {
-    uint l = proposals.length;
-    proposals.push(Proposal(msg.sender, residents[msg.sender], _type, PROPOSAL_STATE.OPEN, _dataHash, l));
-    NewProposal(proposals.length - 1);
+    uint l = requests.length;
+    requests.push(Request(msg.sender, residents[msg.sender], _type, PROPOSAL_STATE.OPEN, _dataHash, l));
+    NewRequest(l);
   }
 
+  function addLawProposal(string _desc)
+    onlyResident(msg.sender) {
+    uint l = lawProposals.length;
+    lawProposals.push(LawProposal(msg.sender, _desc, 0, l));
+    NewLawProposal(l);
+  }
+
+  function signLawProposal(uint index)
+    onlyResident(msg.sender) {
+    require(signedLawProposal[index][msg.sender] == false);
+    signedLawProposal[index][msg.sender] = true;
+    lawProposals[index].signatures++;
+  }
+  
   function verify(string testHash) returns (bool) {
     return validHashes[testHash];
   }
 
-  function resolveProposal(uint _propIdx, string validHash)
+  function resolveRequest(uint _propIdx, string validHash)
     onlyOwner() {
-    proposals[_propIdx].state = PROPOSAL_STATE.RESOLVED;
+    requests[_propIdx].state = PROPOSAL_STATE.RESOLVED;
     validHashes[validHash] = true;
-    ProposalResolved(_propIdx);
+    RequestResolved(_propIdx);
   }
 
-  function rejectProposal(uint _propIdx)
+  function rejectRequest(uint _propIdx)
     onlyOwner() {
-    proposals[_propIdx].state = PROPOSAL_STATE.REJECTED;
-    ProposalRejected(_propIdx);
+    requests[_propIdx].state = PROPOSAL_STATE.REJECTED;
+    RequestRejected(_propIdx);
   }
 
   function () {

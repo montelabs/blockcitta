@@ -10,7 +10,7 @@ import contract from 'truffle-contract';
 import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
 import {instantiateContract} from 'utils/contract';
 
-class Proposal extends Component {
+class Request extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,12 +31,12 @@ class Proposal extends Component {
 
   ReqType = () => {
     var _types = ['Certificato Domicilio', 'Contratto Locazione'];
-    return _types[this.props.proposal.reqType];
+    return _types[this.props.request.reqType];
   }
 
   ReqStatus = () => {
     var _status = ['Aperto', 'Risoluto', 'Respinto'];
-    return _status[this.props.proposal.reqStatus];
+    return _status[this.props.request.reqStatus];
   }
 
   ReqTitle = () => {
@@ -45,7 +45,7 @@ class Proposal extends Component {
   }
 
   ResId = () => {
-    var _i = 'ID Residente: ' + this.props.proposal.resId.toString();
+    var _i = 'ID Residente: ' + this.props.request.resId.toString();
     return _i;
   }
 
@@ -61,53 +61,53 @@ class Proposal extends Component {
           style={{margin: 20}}
           label="Falso"
           secondary={true}
-          onTouchTap={() => this.rejectProposal()}
+          onTouchTap={() => this.rejectRequest()}
         />
         <RaisedButton
           style={{margin: 20}}
           label="Tutto OK"
           primary={true}
-          onTouchTap={() => this.resolveProposal()}
+          onTouchTap={() => this.resolveRequest()}
         />
       </div>
     );
   }
 
-  rejectProposal = () => {
+  rejectRequest = () => {
     console.log('Reject');
-    this.state.contractInstance.rejectProposal(
-      this.props.proposal.index,
+    this.state.contractInstance.rejectRequest(
+      this.props.request.index,
       { from: this.context.web3.web3.eth.defaultAccount }
     )
     .then(() => {
-      console.log('Proposal rejected');
+      console.log('Request rejected');
     })
     .catch(err => {
-      console.log('Error in rejecting proposal');
+      console.log('Error in rejecting request');
     });
 
   }
 
-  resolveProposal = () => {
+  resolveRequest = () => {
     console.log('Resolve');
     if (this.state.contractInstance === null)
       return;
 
-    var hash = keccak256(this.props.proposal.dataHash);
-    this.state.contractInstance.resolveProposal(
-      this.props.proposal.index, hash,
+    var hash = keccak256(this.props.request.dataHash);
+    this.state.contractInstance.resolveRequest(
+      this.props.request.index, hash,
       { from: this.context.web3.web3.eth.defaultAccount }
     )
     .then(() => {
-      console.log('Proposal resolved');
+      console.log('Request resolved');
     })
     .catch(err => {
-      console.log('Error in resolving proposal');
+      console.log('Error in resolving request');
     });
   }
 
   render() {
-    if (this.props.proposal.reqStatus.toString() !== '0')
+    if (this.props.request.reqStatus.toString() !== '0')
       return null;
 
     return (
@@ -122,7 +122,7 @@ class Proposal extends Component {
           subtitle={this.ResId()}
         />
         <CardText expandable={true}>
-          Dati: {this.props.proposal.dataHash}
+          Dati: {this.props.request.dataHash}
         </CardText>
         <this.ActionButtons />
       </Card>
@@ -135,8 +135,8 @@ class Proposal extends Component {
 
 }
 
-Proposal.contextTypes = {
+Request.contextTypes = {
   web3: PropTypes.object
 };
 
-export default Proposal;
+export default Request;

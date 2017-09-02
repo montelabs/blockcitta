@@ -6,13 +6,13 @@ import contract from 'truffle-contract';
 import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
 import {instantiateContract} from 'utils/contract';
 
-import Proposal from 'components/Proposal';
+import Request from 'components/Request';
 
 class PuntoCittaAdm extends Component {
   constructor(props){
     super(props)
     this.state = {
-      proposals: [],
+      requests: [],
       contractInstance: null,
       owner: null
     }
@@ -32,14 +32,14 @@ class PuntoCittaAdm extends Component {
       return;
     }
     var _owner = await _contractInstance.owner();
-    var _proposals = [];
+    var _requests = [];
     var _done = false;
     var i = 0;
     while (!_done) {
       var _p;
       try {
-        _p = await _contractInstance.proposals(i);
-        _proposals[i] = {from: _p[0], resId: _p[1], reqType: _p[2], reqStatus: _p[3], dataHash: _p[4], index: _p[5]};
+        _p = await _contractInstance.requests(i);
+        _requests[i] = {from: _p[0], resId: _p[1], reqType: _p[2], reqStatus: _p[3], dataHash: _p[4], index: _p[5]};
         ++i;
       }
       catch(e) {
@@ -49,7 +49,7 @@ class PuntoCittaAdm extends Component {
     this.setState({
       owner: _owner,
       contractInstance: _contractInstance,
-      proposals: _proposals
+      requests: _requests
     });
   }
 
@@ -59,10 +59,10 @@ class PuntoCittaAdm extends Component {
         this.context.web3.web3.eth.defaultAccount !== this.state.owner)
       return null;
 
-    var propItems = this.state.proposals.map(prop =>
-      <Proposal isDetailed={false}
+    var propItems = this.state.requests.map(prop =>
+      <Request isDetailed={false}
                 key={prop.index}
-                proposal={prop}
+                request={prop}
       />
     );
 

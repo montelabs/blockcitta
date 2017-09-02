@@ -77,6 +77,7 @@ class ResidenceCertificate extends Component {
     if (this.state.contractInstance === null)
       return;
     var hash = keccak256(this.dataString());
+    console.log(this.dataString());
     this.state.contractInstance.verify(hash,
           { from: this.context.web3.web3.eth.defaultAccount })
     .then((res) => {
