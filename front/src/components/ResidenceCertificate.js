@@ -8,6 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import QrReader from 'react-qr-reader';
 import {keccak256} from 'js-sha3';
@@ -36,7 +37,7 @@ class ResidenceCertificate extends Component {
       verifyHappened: false,
       verifyMsg: '',
 
-      sentRequest: false
+      sentRequest: 0 // 0: nothing, 1: happening, 2: success, 3: fail
     }
     this.handleScan = this.handleQRCodeScan.bind(this)
   }
@@ -111,15 +112,16 @@ class ResidenceCertificate extends Component {
   sendRequest = () => {
     if (this.state.contractInstance === null)
       return;
-
+    this.setState({ sentRequest: 1})
     this.state.contractInstance.addRequest(0, this.dataString(),
           { from: this.context.web3.web3.eth.defaultAccount })
     .then(() => {
-      this.setState({ sentRequest: true });
+      this.setState({ sentRequest: 2 });
       console.log('Request added');
     })
     .catch(err => {
-      this.setState({ sentRequest: false });
+
+      this.setState({ sentRequest: 3 });
       console.log('Error sending request: ' + err);
     })
   }
@@ -207,9 +209,18 @@ class ResidenceCertificate extends Component {
   }
 
   SubmitButton = () => {
-    if (this.props.params.newOrVerify === 'nuovo')
-      return <RaisedButton style={{margin: 20}} onTouchTap={() => this.sendRequest()} type='submit' label={'Invia'} primary />
-    return <RaisedButton style={{margin: 20}} onTouchTap={() => this.verify()} type='submit' label={'Verifica'} primary />
+    // Sending
+    if (this.state.sentRequest === 1) {
+      return <CircularProgress />
+    }
+    // Success
+    else if (this.state.sentRequest === 2) {
+      return <RaisedButton style={{margin: 20}} onTouchTap={() => window.print()} label={'Stampa Certificato'} primary />
+    }
+    if (this.props.params.newOrVerify === 'nuovo') {
+      return <RaisedButton style={{margin: 20}} onTouchTap={() => this.sendRequest()} label={'Invia'} primary />
+    }
+    return <RaisedButton style={{margin: 20}} onTouchTap={() => this.verify()} label={'Verifica'} primary />
   }
 
   handleFullNameChange = (event, newValue) => {
