@@ -6,9 +6,12 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 import QrReader from 'react-qr-reader';
 import QRCodeWriter from './qrcodeC/src';
+import {keccak256} from 'js-sha3';
 
 import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
@@ -28,9 +31,37 @@ class ResidenceCertificate extends Component {
       birthDate: {},
       sex: '',
       address: '',
-      email: ''
+      email: '',
+      verifyHappened: false,
+      verifyMsg: ''
     }
     this.handleScan = this.handleQRCodeScan.bind(this)
+  }
+
+  clearVerify = () => {
+    this.setState({ verifyHappened : false });
+  };
+
+  VerifyStatusDialog = () => {
+    const actions = [
+      <FlatButton key='ok'
+        label="Ok"
+        primary={true}
+        keyboardFocused={false}
+        onTouchTap={this.clearVerify}
+      />
+    ];
+
+    return (
+      <Dialog
+        title={this.state.verifyMsg}
+        actions={actions}
+        modal={false}
+        open={this.state.verifyHappened}
+        onRequestClose={this.clearVerify}
+      >
+      </Dialog>
+    );
   }
 
   dataString = () => {
@@ -40,6 +71,21 @@ class ResidenceCertificate extends Component {
                 this.state.address + ' / ' +
                 this.state.email;
     return _data;
+  }
+
+  verify = () => {
+    if (this.state.contractInstance === null)
+      return;
+    var hash = keccak256(this.dataString());
+    this.state.contractInstance.verify(hash,
+          { from: this.context.web3.web3.eth.defaultAccount })
+    .then((res) => {
+      var _msg = res ? 'This certificate is valid!' : 'This certificate is not valid!';
+      this.setState({ verifyHappened: true, verifyMsg: _msg });
+    })
+    .catch(err => {
+      console.log('Error in verifying: ' + err);
+    });
   }
 
   sendRequest = () => {
@@ -139,8 +185,8 @@ class ResidenceCertificate extends Component {
 
   SubmitButton = () => {
     if (this.props.params.newOrVerify === 'nuovo')
-      return <RaisedButton onTouchTap={() => this.sendRequest()} type='submit' label={'Invia'} primary />
-    return null;
+      return <RaisedButton style={{margin: 20}} onTouchTap={() => this.sendRequest()} type='submit' label={'Invia'} primary />
+    return <RaisedButton style={{margin: 20}} onTouchTap={() => this.verify()} type='submit' label={'Verifica'} primary />
   }
 
   handleFullNameChange = (event, newValue) => {
@@ -184,7 +230,6 @@ class ResidenceCertificate extends Component {
         size= {200}
         value='Dante-02.09.2017-M-Via 0, 6830, Chiasso' 
         />
-        <this.getQRCode/>
         <GridList
           style={ResidenceCertificate.gridListStyle}
           cellHeight={'auto'}
@@ -240,6 +285,8 @@ class ResidenceCertificate extends Component {
           </GridTile>
         </GridList>
         <this.SubmitButton />
+        <this.getQRCode/>
+        <this.VerifyStatusDialog />
       </div>
     )
 

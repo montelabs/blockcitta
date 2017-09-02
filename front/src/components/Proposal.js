@@ -13,7 +13,6 @@ import {instantiateContract} from 'utils/contract';
 class Proposal extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       isExpanded: false,
       contractInstance: null
@@ -95,8 +94,6 @@ class Proposal extends Component {
       return;
 
     var hash = keccak256(this.props.proposal.dataHash);
-    console.log(this.props.proposal.index);
-    console.log(hash);
     this.state.contractInstance.resolveProposal(
       this.props.proposal.index, hash,
       { from: this.context.web3.web3.eth.defaultAccount }
