@@ -42,4 +42,4 @@ class PuntoCittaAdm extends Component {
   }
 
 }
-
+export default PuntoCittaAdm;
