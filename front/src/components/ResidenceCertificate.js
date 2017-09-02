@@ -14,6 +14,8 @@ import contract from 'truffle-contract';
 
 import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
 
+import {instantiateContract} from 'utils/contract';
+
 class ResidenceCertificate extends Component {
   constructor(props){
     super(props)
@@ -25,28 +27,27 @@ class ResidenceCertificate extends Component {
     this.handleScan = this.handleQRCodeScan.bind(this)
   }
 
+  dataString = () => {
+
+
+  }
+
   sendRequest = () => {
     if (this.state.contractInstance === null)
       return;
+
+    this.state.contractInstance.addProposal(
+          this.context.web3.web3.eth.eth.defaultAccount,
+          0);
   }
 
   componentWillMount() {
-    this.instantiateContract();
-  }
-
-  async instantiateContract() {
-    const pcContract = contract(PuntoCittaJson);
-    pcContract.setProvider(this.context.web3.web3.currentProvider);
-    var _contractInstance;
-    try {
-      _contractInstance = await pcContract.deployed();
-    }
-    catch(err) {
-      console.error('Contract not deployed!');
-      return;
-    }
-    this.setState({
-      contractInstance: _contractInstance
+    instantiateContract(PuntoCittaJson, this.context.web3.web3.currentProvider)
+    .then((contract) => {
+      this.setState({contractInstance: contract});
+    })
+    .catch(err => {
+      console.log('Error: ' + err);
     });
   }
 

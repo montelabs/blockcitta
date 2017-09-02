@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
 
 import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
+import {instantiateContract} from 'utils/contract';
 
 import Proposal from 'components/Proposal';
 
@@ -18,15 +19,13 @@ class PuntoCittaAdm extends Component {
   }
 
   componentWillMount() {
-    this.instantiateContract();
+    this.instantiate();
   }
 
-  async instantiateContract() {
-    const pcContract = contract(PuntoCittaJson);
-    pcContract.setProvider(this.context.web3.web3.currentProvider);
+  async instantiate() {
     var _contractInstance;
     try {
-      _contractInstance = await pcContract.deployed();
+      _contractInstance = await instantiateContract(PuntoCittaJson, this.context.web3.web3.currentProvider);
     }
     catch(err) {
       console.error('Contract not deployed!');
