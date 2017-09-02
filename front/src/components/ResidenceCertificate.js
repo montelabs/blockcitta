@@ -66,19 +66,19 @@ class ResidenceCertificate extends Component {
   }
 
  dataString = () => {
-    var _data = this.state.name + ' / ' +
-                this.formatDate(this.state.birthDate) + ' / ' +
-                this.state.sex + ' / ' +
-                this.state.address + ' / ' +
+    var _data = this.state.name + '/' +
+                this.formatDate(this.state.birthDate) + '/' +
+                this.state.sex + '/' +
+                this.state.address + '/' +
                 this.state.email;
     return _data;
   }
 
 
   dataStringHash = () => {
-    var _data = this.state.name + ' / ' +
-                this.formatDate(this.state.birthDate) + ' / ' +
-                this.state.sex + ' / ' +
+    var _data = this.state.name + '/' +
+                this.formatDate(this.state.birthDate) + '/' +
+                this.state.sex + '/' +
                 this.state.address
     return _data;
   }

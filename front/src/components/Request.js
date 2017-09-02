@@ -93,9 +93,10 @@ class Request extends Component {
     if (this.state.contractInstance === null)
       return;
 
-    var _split = this.props.request.dataHash;
+    var _split = this.props.request.dataHash.split('/');
+    var _data = _split[0] + '/' + _split[1] + '/' + _split[2] + '/' + _split[3];
     
-    var hash = keccak256(this.props.request.dataHash);
+    var hash = keccak256(_data);
     this.state.contractInstance.resolveRequest(
       this.props.request.index, hash,
       { from: this.context.web3.web3.eth.defaultAccount }
