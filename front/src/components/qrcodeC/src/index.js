@@ -70,6 +70,7 @@ class QRCode extends React.Component {
   update() {
 
     var {value, size, level, bgColor, fgColor, shiftTiles} = this.props;
+    size=200;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
