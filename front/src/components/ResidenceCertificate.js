@@ -83,9 +83,8 @@ class ResidenceCertificate extends Component {
     } catch(e) {
       return;
     }
-    this.state.contractInstance.verify(hash,
-          { from: this.context.web3.web3.eth.defaultAccount })
-    .then((res) => {
+    this.state.contractInstance.verify(hash)
+    .then(res => {
       var _msg = res ? 'This certificate is valid!' : 'This certificate is not valid!';
       this.setState({ verifyHappened: true, verifyMsg: _msg });
     })

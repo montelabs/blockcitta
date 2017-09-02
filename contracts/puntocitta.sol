@@ -79,7 +79,7 @@ contract PuntoCitta {
     lawProposals[index].signatures++;
   }
   
-  function verify(string testHash) returns (bool) {
+  function verify(string testHash) constant returns (bool) {
     return validHashes[testHash];
   }
 
