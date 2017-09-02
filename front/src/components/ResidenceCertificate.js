@@ -22,23 +22,37 @@ class ResidenceCertificate extends Component {
     this.state = {
       showQRCodeScanner: false,
       qrCodeDelay: 200,
-      contractInstance: null
+      contractInstance: null,
+      name: '',
+      birthDate: '',
+      sex: '',
+      address: '',
+      email: ''
     }
     this.handleScan = this.handleQRCodeScan.bind(this)
   }
 
   dataString = () => {
-
-
+    var _data = this.state.name + ' / ' +
+                this.state.birthDate + ' / ' +
+                this.state.sex + ' / ' +
+                this.state.address + ' / ' +
+                this.state.email;
+    return _data;
   }
 
   sendRequest = () => {
     if (this.state.contractInstance === null)
       return;
 
-    this.state.contractInstance.addProposal(
-          this.context.web3.web3.eth.eth.defaultAccount,
-          0);
+    this.state.contractInstance.addProposal(0, this.dataString(),
+          { from: this.context.web3.web3.eth.defaultAccount })
+    .then(() => {
+      console.log('Proposal added');
+    })
+    .catch(err => {
+      console.log('Error sending proposal: ' + err);
+    })
   }
 
   componentWillMount() {
@@ -75,7 +89,10 @@ class ResidenceCertificate extends Component {
     return null
   }
 
-  getQRCode = (props) => {
+  getQRCode = () => {
+    if (this.props.params.newOrVerify === 'nuovo'){
+      return null
+    }
     if (this.state.showQRCodeScanner) {
       return (
         <div> 
@@ -89,23 +106,63 @@ class ResidenceCertificate extends Component {
         </div>
       )
     }
-    if (!props.show){
-      return null
-    }
     return <RaisedButton
       onClick={this.handleScanQRCodePress}
       type='submit' 
       label='Scan QR-Code' 
       primary />
   }
-  
+
+  ExpirationDate = () => {
+    if (this.props.params.newOrVerify === 'verificare')
+      return <DatePicker 
+        floatingLabelText='Validità'
+        container='inline'
+        formatDate={this.formatDate}
+        />
+    return null;
+  }
+
+  SubmitButton = () => {
+    if (this.props.params.newOrVerify === 'nuovo')
+      return <RaisedButton onTouchTap={() => this.sendRequest()} type='submit' label={'Nuovo'} primary />
+    return null;
+  }
+
+  handleFullNameChange = (event, newValue) => {
+    this.setState({name: newValue});
+  }
+
+  handleAddress = (event, newValue) => {
+    this.setState({address: newValue});
+  }
+
+  handleEmail = (event, newValue) => {
+    this.setState({email: newValue});
+  }
+
+  handleDate = (event, newDate) => {
+    this.setState({birthDate: newDate});
+  }
+
+  handleSexChange = (event, key) => {
+    var _s = null;
+    if (key === 0)
+      _s = 'M';
+    else if (key === 1)
+      _s = 'F';
+    else
+      return;
+    this.setState({sex: _s});
+  }
+
   render(){
     const {type, newOrVerify} = this.props.params;
     console.log('Type:', type, 'newOrVerify:', newOrVerify);
 
     return (
       <div>
-        <this.getQRCode show={true}/>
+        <this.getQRCode/>
         <GridList
           style={ResidenceCertificate.gridListStyle}
           cellHeight={'auto'}
@@ -124,6 +181,7 @@ class ResidenceCertificate extends Component {
               floatingLabelText='Data di nascita'
               container='inline'
               formatDate={this.formatDate}
+              onChange={this.handleDate}
             />
           </GridTile>
           <GridTile>
@@ -142,12 +200,12 @@ class ResidenceCertificate extends Component {
         <GridList
           style={ResidenceCertificate.gridListStyle}
           cellHeight={'auto'}
-          cols={2}
+          cols={3}
         >
           <GridTile>
             <TextField
               fullWidth={true}
-              name='fullname'
+              name='address'
               floatingLabelText='Indirizzo (via, CAP e località)'
               onChange={this.handleAddress}
             />
@@ -155,18 +213,14 @@ class ResidenceCertificate extends Component {
           <GridTile>
             <TextField
               fullWidth={true}
-              name='e-mail'
+              name='email'
               floatingLabelText='e-mail'
-              onChange={this.handleAddress}
+              onChange={this.handleEmail}
             />
           </GridTile>
+          <this.ExpirationDate />
         </GridList>
-        <RaisedButton
-          onTouchTap={() => sendRequest()}
-          type='submit'
-          label={(newOrVerify === 'nuovo') ? 'Invia' : 'Verifica'} 
-          primary={true}
-        />
+        <this.SubmitButton />
       </div>
     )
 
