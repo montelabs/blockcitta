@@ -26,6 +26,9 @@ class ResidenceCertificate extends Component {
     height: 240,
     width: 320,
   }
+  formatDate = (date) => {
+    return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`;
+  }
 
   handleQRCodeScan(data){
     if (data !== null)
@@ -34,6 +37,7 @@ class ResidenceCertificate extends Component {
         showQRCodeScanner: false
       })
   }
+
   handleQRCodeError(err){
     console.error(err)
   }
@@ -65,16 +69,6 @@ class ResidenceCertificate extends Component {
       type='submit' 
       label='Scan QR-Code' 
       primary />
-  }
-
-  ExpirationDate = () => {
-    if (this.props.params.newOrVerify === 'verificare')
-      return <DatePicker 
-        floatingLabelText='Validità'
-        container='inline'
-        formatDate={this.formatDate}
-        />
-    return null;
   }
 
   SubmitButton = () => {
@@ -145,7 +139,6 @@ class ResidenceCertificate extends Component {
               onChange={this.handleAddress}
             />
           </GridTile>
-          <this.ExpirationDate />
         </GridList>
         <this.SubmitButton />
       </div>
