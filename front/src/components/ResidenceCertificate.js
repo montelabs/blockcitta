@@ -13,7 +13,7 @@ class ResidenceCertificate extends Component {
     const {type, newOrVerify} = this.props.params;
     console.log('Type:', type, 'newOrVerify:', newOrVerify);
 
-    if (newOrVerify === 'nuovo') 
+    if (newOrVerify === 'nuovo')
       return(
         <NewCertificate />
       )

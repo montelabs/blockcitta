@@ -27,7 +27,7 @@ class VerifyCertificate extends Component {
       width: 320,
     }
     return(
-      <div style={{marginLeft: 400}}>
+      <div>
         <QrReader
           delay={this.state.qrCodeDelay}
           style={previewStyle}
