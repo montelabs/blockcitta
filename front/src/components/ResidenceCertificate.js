@@ -26,8 +26,15 @@ class ResidenceCertificate extends Component {
     height: 240,
     width: 320,
   }
+  
   formatDate = (date) => {
-    return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`;
+    let month = (date.getMonth()+1).toString();
+    let day = (date.getDate()).toString();
+    if (month.length === 1)
+      month = '0' + month;
+    if (day.length === 1)
+      day = '0' + day;
+    return `${day}.${month}.${date.getFullYear()}`;
   }
 
   handleQRCodeScan(data){
