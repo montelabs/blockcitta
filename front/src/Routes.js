@@ -3,11 +3,13 @@ import React from 'react';
 import {Route, IndexRedirect} from 'react-router';
 
 import Master from 'components/Master';
-import QRCode from 'components/QRCode';
+import ResidenceCertificate from 'components/ResidenceCertificate';
 
 const Routes = (
   <Route path='/' component={Master}> 
-    <Route path='qrcode' component={QRCode} />
+    <Route path='certificati'>
+      <Route path='domicilio' component={ResidenceCertificate} />
+    </Route>
   </Route>
 );
 
