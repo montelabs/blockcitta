@@ -21,10 +21,24 @@ class NavDrawer extends Component {
   }
 
   Navigations = () => {
+    const {
+      location,
+      onRequestChangeNavDrawer,
+      onChangeList
+    } = this.props;
+
+    let certificates = [
+      <ListItem 
+        key='Domicilio'
+        value='/certificati/domicilio'
+        href='#/certificati/domicilio'
+        primaryText='Domicilio'
+      />
+    ]
     return <Drawer
       open={true}
       docked={true}
-      //onRequestChange={onRequestChangeNavDrawer}
+      onRequestChange={onRequestChangeNavDrawer}
       containerStyle={{zIndex: zIndex.drawer - 100}}
     >
       <AppBar
@@ -32,8 +46,13 @@ class NavDrawer extends Component {
         showMenuIconButton={false} />
       <SelectableList
         value={location.pathname}
-        //onChange={onChangeList}
+        onChange={onChangeList}
       >
+      <ListItem
+        primaryTogglesNestedList={true}
+        primaryText='Certificati'
+        nestedItems={certificates}
+      />
       </SelectableList>
     </Drawer>
   }
