@@ -9,16 +9,47 @@ import DatePicker from 'material-ui/DatePicker';
 
 import QrReader from 'react-qr-reader';
 
+import PropTypes from 'prop-types'
+import contract from 'truffle-contract';
+
+import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
+
 class ResidenceCertificate extends Component {
   constructor(props){
     super(props)
     this.state = {
       showQRCodeScanner: false,
-      qrCodeDelay: 200
+      qrCodeDelay: 200,
+      contractInstance: null
     }
     this.handleScan = this.handleQRCodeScan.bind(this)
   }
-  
+
+  sendRequest = () => {
+    if (this.state.contractInstance === null)
+      return;
+  }
+
+  componentWillMount() {
+    this.instantiateContract();
+  }
+
+  async instantiateContract() {
+    const pcContract = contract(PuntoCittaJson);
+    pcContract.setProvider(this.context.web3.web3.currentProvider);
+    var _contractInstance;
+    try {
+      _contractInstance = await pcContract.deployed();
+    }
+    catch(err) {
+      console.error('Contract not deployed!');
+      return;
+    }
+    this.setState({
+      contractInstance: _contractInstance
+    });
+  }
+
   static gridListStyle = {
     marginTop:10,
   };
@@ -129,7 +160,12 @@ class ResidenceCertificate extends Component {
             />
           </GridTile>
         </GridList>
-        <RaisedButton type='submit' label={(newOrVerify === 'nuovo') ? 'Invia' : 'Verifica'} primary />
+        <RaisedButton
+          onTouchTap={() => sendRequest()}
+          type='submit'
+          label={(newOrVerify === 'nuovo') ? 'Invia' : 'Verifica'} 
+          primary={true}
+        />
       </div>
     )
 
@@ -143,4 +179,10 @@ class ResidenceCertificate extends Component {
     //   )
   }
 }
+
+ResidenceCertificate.contextTypes = {
+  web3: PropTypes.object
+};
+
 export default ResidenceCertificate;
+
