@@ -8,6 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 
 import QrReader from 'react-qr-reader';
+import QRCodeWriter from './qrcode/src';
 
 import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
@@ -179,6 +180,10 @@ class ResidenceCertificate extends Component {
 
     return (
       <div>
+        <QRCodeWriter
+        size= {200}
+        value='Dante-02.09.2017-M-Via 0, 6830, Chiasso' 
+        />
         <this.getQRCode/>
         <GridList
           style={ResidenceCertificate.gridListStyle}
