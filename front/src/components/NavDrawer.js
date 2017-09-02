@@ -27,12 +27,18 @@ class NavDrawer extends Component {
       onChangeList
     } = this.props;
 
-    let certificates = [
+    let newOrVerify = [
       <ListItem 
         key='Domicilio'
-        value='/certificati/domicilio'
-        href='#/certificati/domicilio'
-        primaryText='Domicilio'
+        value='/certificati/domicilio/nuovo'
+        href='#/certificati/domicilio/nuovo'
+        primaryText='Nuovo'
+      />,
+      <ListItem 
+        key='Domicilio'
+        value='/certificati/domicilio/verificare'
+        href='#/certificati/domicilio/verificare'
+        primaryText='Verificare'
       />
     ]
     return <Drawer
@@ -51,7 +57,13 @@ class NavDrawer extends Component {
       <ListItem
         primaryTogglesNestedList={true}
         primaryText='Certificati'
-        nestedItems={certificates}
+        nestedItems={[
+          <ListItem key='Domicilio'
+            primaryTogglesNestedList={true}
+            primaryText='Domicilio'
+            nestedItems={newOrVerify}
+          />
+        ]}
       />
       </SelectableList>
     </Drawer>

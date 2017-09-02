@@ -1,42 +1,45 @@
 import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
 
-class QRCode extends Component {
+class ResidenceCertificate extends Component {
   constructor(props){
     super(props)
     this.state = {
-      delay: 100,
-      result: 'No result',
+      qrCodeDelay: 100,
+      qrCodeResult: 'No result',
     }
 
-    this.handleScan = this.handleScan.bind(this)
+    this.handleScan = this.handleQRCodeScan.bind(this)
   }
-  handleScan(data){
+  
+  handleQRCodeScan(data){
     if (data !== null)
       this.setState({
-        result: data,
+        qrCodeResult: data,
       })
   }
-  handleError(err){
+  handleQRCodeError(err){
     console.error(err)
   }
   render(){
+    const {type, newOrVerify} = this.props.params;
     const previewStyle = {
       height: 240,
       width: 320,
     }
+    console.log('Type:', type, 'newOrVerify:', newOrVerify);
 
     return(
       <div style={{marginLeft: 400}}>
         <QrReader
-          delay={this.state.delay}
+          delay={this.state.qrCodeDelay}
           style={previewStyle}
-          onError={this.handleError}
+          onError={this.handleQRCodeError}
           onScan={this.handleScan}
           />
-        <p>RESULT: {this.state.result}</p>
+        <p>RESULT: {this.state.qrCodeResult}</p>
       </div>
     )
   }
 }
-export default QRCode;
+export default ResidenceCertificate;

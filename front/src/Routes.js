@@ -8,7 +8,7 @@ import ResidenceCertificate from 'components/ResidenceCertificate';
 const Routes = (
   <Route path='/' component={Master}> 
     <Route path='certificati'>
-      <Route path='domicilio' component={ResidenceCertificate} />
+      <Route path=':type/:newOrVerify' component={ResidenceCertificate} />
     </Route>
   </Route>
 );
