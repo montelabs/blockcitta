@@ -27,6 +27,7 @@
     "react-dom": "^15.6.1",
     "react-event-listener": "^0.4.5",
     "react-icons": "^2.2.5",
+    "react-qr-reader": "^1.2.1",
     "react-router": "^3.0.0",
     "react-scripts": "1.0.10",
     "react-tap-event-plugin": "^2.0.1",
