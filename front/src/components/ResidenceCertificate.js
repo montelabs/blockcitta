@@ -158,15 +158,8 @@ class ResidenceCertificate extends Component {
     this.setState({birthDate: newDate});
   }
 
-  handleSexChange = (event, key) => {
-    var _s = null;
-    if (key === 0)
-      _s = 'M';
-    else if (key === 1)
-      _s = 'F';
-    else
-      return;
-    this.setState({sex: _s});
+  handleSexChange = (event, key, value) => {
+    this.setState({sex: value});
   }
 
   Email = () => {
