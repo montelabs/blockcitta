@@ -24,7 +24,7 @@ class ResidenceCertificate extends Component {
       qrCodeDelay: 200,
       contractInstance: null,
       name: '',
-      birthDate: '',
+      birthDate: {},
       sex: '',
       address: '',
       email: ''
@@ -90,7 +90,13 @@ class ResidenceCertificate extends Component {
   handleQRCodeScan(data){
     if (data !== null) {
       let QRCodeData = data.split('-');
+      let newDate = QRCodeData[1].split('.');
+      newDate = new Date(`${newDate[1]}.${newDate[0]}.${newDate[2]}`);
       this.setState({
+        name: QRCodeData[0],
+        birthDate: newDate,
+        sex: QRCodeData[2],
+        address: QRCodeData[3],
         qrCodeResult: data,
         showQRCodeScanner: false
       })
@@ -163,6 +169,17 @@ class ResidenceCertificate extends Component {
     this.setState({sex: _s});
   }
 
+  Email = () => {
+    if (this.props.params.newOrVerify === 'nuovo')
+      return <TextField
+        fullWidth={true}
+        name='email'
+        floatingLabelText='e-mail'
+        onChange={this.handleEmail}
+      />
+    return null;
+  }
+
   render(){
     const {type, newOrVerify} = this.props.params;
     console.log('Type:', type, 'newOrVerify:', newOrVerify);
@@ -177,6 +194,7 @@ class ResidenceCertificate extends Component {
         >
           <GridTile>
             <TextField
+              value={this.state.name}
               fullWidth={true}
               name='fullname'
               floatingLabelText='Nome Completto'
@@ -185,6 +203,7 @@ class ResidenceCertificate extends Component {
           </GridTile>
           <GridTile>
             <DatePicker
+              value={this.state.birthDate}
               floatingLabelText='Data di nascita'
               container='inline'
               formatDate={this.formatDate}
@@ -212,18 +231,14 @@ class ResidenceCertificate extends Component {
           <GridTile>
             <TextField
               fullWidth={true}
+              value={this.state.address}
               name='address'
               floatingLabelText='Indirizzo (via, CAP e località)'
               onChange={this.handleAddress}
             />
           </GridTile>
           <GridTile>
-            <TextField
-              fullWidth={true}
-              name='email'
-              floatingLabelText='e-mail'
-              onChange={this.handleEmail}
-            />
+            <this.Email />
           </GridTile>
         </GridList>
         <this.SubmitButton />
