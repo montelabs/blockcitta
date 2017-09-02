@@ -26,6 +26,24 @@ class PuntoCittaAdm extends Component {
     var _contractInstance;
     try {
       _contractInstance = await instantiateContract(PuntoCittaJson, this.context.web3.web3.currentProvider);
+      let laterEvents = _contractInstance.allEvents({
+        fromBlock: 'latest',
+        toBlock: 'latest'
+      });
+      laterEvents.watch((error, response) => {
+        if (response.event === 'RequestResolved' || response.event === 'RequestRejected') {
+          this.setState(previousState => {
+            previousState.requests.splice(response.args.propIdx.toNumber(), 1);
+          });
+        }
+        else if (response.event === 'NewRequest') {
+          _contractInstance.requests(response.args.propIdx.toNumber()).then(_p => {
+            this.setState(previousState => {
+              previousState.requests.push({from: _p[0], resId: _p[1], reqType: _p[2], reqStatus: _p[3], dataHash: _p[4], index: _p[5]});
+            })
+          });
+        }
+      });
     }
     catch(err) {
       console.error('Contract not deployed!');
@@ -39,7 +57,7 @@ class PuntoCittaAdm extends Component {
       var _p;
       try {
         _p = await _contractInstance.requests(i);
-        _requests[i] = {from: _p[0], resId: _p[1], reqType: _p[2], reqStatus: _p[3], dataHash: _p[4], index: _p[5]};
+        _requests.push({from: _p[0], resId: _p[1], reqType: _p[2], reqStatus: _p[3], dataHash: _p[4], index: _p[5]});
         ++i;
       }
       catch(e) {

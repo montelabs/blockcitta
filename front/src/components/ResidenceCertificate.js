@@ -122,7 +122,7 @@ class ResidenceCertificate extends Component {
 
   componentWillMount() {
     instantiateContract(PuntoCittaJson, this.context.web3.web3.currentProvider)
-    .then((contract) => {
+    .then(contract => {
       this.setState({contractInstance: contract});
     })
     .catch(err => {
