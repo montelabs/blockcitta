@@ -65,7 +65,7 @@ class ResidenceCertificate extends Component {
     );
   }
 
-  dataString = () => {
+ dataString = () => {
     var _data = this.state.name + ' / ' +
                 this.formatDate(this.state.birthDate) + ' / ' +
                 this.state.sex + ' / ' +
@@ -74,15 +74,25 @@ class ResidenceCertificate extends Component {
     return _data;
   }
 
+
+  dataStringHash = () => {
+    var _data = this.state.name + ' / ' +
+                this.formatDate(this.state.birthDate) + ' / ' +
+                this.state.sex + ' / ' +
+                this.state.address
+    return _data;
+  }
+
   verify = () => {
     if (this.state.contractInstance === null)
       return;
     var hash;
     try {
-      hash = keccak256(this.dataString());
+      hash = keccak256(this.dataStringHash());
     } catch(e) {
       return;
     }
+    console.log(hash);
     this.state.contractInstance.verify(hash)
     .then(res => {
       var _msg = res ? 'This certificate is valid!' : 'This certificate is not valid!';

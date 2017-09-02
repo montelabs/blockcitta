@@ -93,6 +93,8 @@ class Request extends Component {
     if (this.state.contractInstance === null)
       return;
 
+    var _split = this.props.request.dataHash;
+    
     var hash = keccak256(this.props.request.dataHash);
     this.state.contractInstance.resolveRequest(
       this.props.request.index, hash,
