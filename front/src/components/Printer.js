@@ -11,7 +11,6 @@ class Printer extends Component {
 
   render() {
     const {name, birthDate, sex, address, encodedString } = this.props;
-    console.log('name', name, 'bday', birthDate, 'sex', sex, 'addr', address);
     return (
       <PrintTemplate>
         <div style={{marginLeft:-210}}>
