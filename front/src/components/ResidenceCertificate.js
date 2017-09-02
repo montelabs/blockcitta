@@ -83,12 +83,18 @@ class ResidenceCertificate extends Component {
     return `${day}.${month}.${date.getFullYear()}`;
   }
 
+  handleSexChange = (event, _, sex) => {
+    this.setState({sex: sex});
+  }
+
   handleQRCodeScan(data){
-    if (data !== null)
+    if (data !== null) {
+      let QRCodeData = data.split('-');
       this.setState({
         qrCodeResult: data,
         showQRCodeScanner: false
       })
+    }
   }
 
   handleQRCodeError(err){
