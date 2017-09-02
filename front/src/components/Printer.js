@@ -15,16 +15,16 @@ class Printer extends Component {
       <PrintTemplate>
         <div style={{marginLeft:-210}}>
           <h1>Certificato di Domicilio</h1>
-          <h3>Il controllo di abitanti certifica che il signor {name}
-            sta registratto nella comune di Chiasso con gli dati:
+          <h3> Il controllo di abitanti certifica che lo sottoscritto(a)
+            sta registratto nel comune di Chiasso con i seguenti dati:
           </h3>
           <p>
             Nome: {name}<br />
             Nato il: {birthDate}<br />
-            sesso: {(sex === 'M') ? 'maschile' : 'feminile'}<br />
-            Indirizo: Via {address}<br />
-            La validità di questo documento deve venire atestata con
-            il QRCode: </p>
+            Sesso: {(sex === 'M') ? 'maschile' : 'feminile'}<br />
+            Indirizzo: {address}<br />
+            La validità di questo documento deve essere verificata tramite
+            il QRCode oppure compilando i dati nei rispettivi campi.</p>
             <QRCodeWriter
               size= {200}
               value={encodedString} 
