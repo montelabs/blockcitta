@@ -52,21 +52,22 @@ class NewCertificate extends Component {
               />
             </GridTile>
             <GridTile>
-              <SelectField
-                floatingLabelText='Sesso'
-                value={this.state.sex}
-                onChange={this.handleSexChange}
-              >
-                <MenuItem value={'M'} primaryText='M'/>
-                <MenuItem value={'F'} primaryText='F'/>
-              </SelectField>
-            </GridTile>
-            <GridTile>
               <DatePicker
                 floatingLabelText='Data di nascita'
                 container='inline'
                 formatDate={this.formatDate}
               />
+            </GridTile>
+            <GridTile>
+              <SelectField
+                floatingLabelText='Sesso'
+                value={this.state.sex}
+                onChange={this.handleSexChange}
+                style={{width:100}}
+              >
+                <MenuItem value={'M'} primaryText='M'/>
+                <MenuItem value={'F'} primaryText='F'/>
+              </SelectField>
             </GridTile>
           </GridList>
 
