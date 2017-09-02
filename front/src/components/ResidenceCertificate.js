@@ -229,6 +229,7 @@ class ResidenceCertificate extends Component {
         <QRCodeWriter
         size= {200}
         value='Dante-02.09.2017-M-Via 0, 6830, Chiasso' 
+        shiftTiles={3}
         />
         <GridList
           style={ResidenceCertificate.gridListStyle}
