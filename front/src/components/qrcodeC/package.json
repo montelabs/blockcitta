@@ -1,0 +1,54 @@
+{
+  "name": "qrcode.react",
+  "version": "0.7.1",
+  "description": "React component to generate QR codes",
+  "keywords": [
+    "react",
+    "react-component",
+    "qrcode"
+  ],
+  "homepage": "http://zpao.github.io/qrcode.react",
+  "main": "lib/index.js",
+  "scripts": {
+    "flow": "flow",
+    "lint": "eslint src/ examples/demo.js",
+    "pretty": "prettier --write --single-quote --bracket-spacing=false --trailing-comma=es5 {.eslintrc.js,src/*.js,examples/demo.js}",
+    "prepublish": "flow && make clean && make all",
+    "prepublish-docs": "make clean && make all",
+    "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul O’Shannessy <paul@oshannessy.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zpao/qrcode.react.git"
+  },
+  "license": "ISC",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "prop-types": "^15.5.8",
+    "qr.js": "0.0.0"
+  },
+  "peerDependencies": {
+    "react": "^15.5.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-eslint": "^7.2.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browserify": "^13.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-prettier": "^1.6.0",
+    "eslint-plugin-react": "^3.16.1",
+    "flow-bin": "^0.45.0",
+    "gh-pages": "^0.12.0",
+    "prettier": "^1.1.0",
+    "react": "^15.5.3",
+    "react-dom": "^15.5.3"
+  }
+}
