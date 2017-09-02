@@ -2,14 +2,31 @@ import React, { Component } from 'react'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import {keccak256} from 'js-sha3';
 import lodash from 'lodash';
+import PropTypes from 'prop-types'
+import contract from 'truffle-contract';
+
+import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
+import {instantiateContract} from 'utils/contract';
 
 class Proposal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isExpanded: false
+      isExpanded: false,
+      contractInstance: null
     }
+  }
+
+  componentWillMount() {
+    instantiateContract(PuntoCittaJson, this.context.web3.web3.currentProvider)
+    .then((contract) => {
+      this.setState({contractInstance: contract});
+    })
+    .catch(err => {
+      console.log('Error: ' + err);
+    });
   }
 
   ReqType = () => {
@@ -58,10 +75,35 @@ class Proposal extends Component {
 
   rejectProposal = () => {
     console.log('Reject');
+    this.state.contractInstance.rejectProposal(
+      this.props.proposal.index,
+      { from: this.context.web3.web3.eth.defaultAccount }
+    )
+    .then(() => {
+      console.log('Proposal rejected');
+    })
+    .catch(err => {
+      console.log('Error in rejecting proposal');
+    });
+
   }
 
   resolveProposal = () => {
     console.log('Resolve');
+    if (this.state.contractInstance === null)
+      return;
+
+    var hash = keccak256(this.props.proposal.dataHash);
+    this.state.contractInstance.resolveProposal(
+      this.props.proposal.index, hash,
+      { from: this.context.web3.web3.eth.defaultAccount }
+    )
+    .then(() => {
+      console.log('Proposal resolved');
+    })
+    .catch(err => {
+      console.log('Error in resolving proposal');
+    });
   }
 
   render() {
@@ -80,7 +122,7 @@ class Proposal extends Component {
           subtitle={this.ResId()}
         />
         <CardText expandable={true}>
-          Dati: {this.props.proposal.dataHash.toString()}
+          Dati: {this.props.proposal.dataHash}
         </CardText>
         <this.ActionButtons />
       </Card>
@@ -92,5 +134,9 @@ class Proposal extends Component {
   }
 
 }
+
+Proposal.contextTypes = {
+  web3: PropTypes.object
+};
 
 export default Proposal;

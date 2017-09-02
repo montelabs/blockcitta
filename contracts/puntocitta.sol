@@ -59,7 +59,7 @@ contract PuntoCitta {
     return (proposals[propIdx].from, proposals[propIdx].residentId, proposals[propIdx].reqType, proposals[propIdx].state, proposals[propIdx].dataHash);
   }
 
-  function verify(string testHash) {
+  function verify(string testHash) returns (bool) {
     return validHashes[testHash];
   }
 
