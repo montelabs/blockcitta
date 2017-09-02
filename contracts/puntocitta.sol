@@ -13,6 +13,7 @@ contract PuntoCitta {
 
   struct Proposal {
     address from;
+    uint residentId;
     REQ_TYPE reqType;
     PROPOSAL_STATE state;
     string dataHash;
@@ -42,34 +43,21 @@ contract PuntoCitta {
   }
 
   function addResident(address pubKey, uint internalId)
-    onlyOwner() {
+    {//onlyOwner() {
     residents[pubKey] = internalId;
   }
 
   function addProposal(address _from, REQ_TYPE _type, string _dataHash)
     onlyResident(_from) {
     require(msg.sender == _from);
-    proposals.push(Proposal(_from, _type, PROPOSAL_STATE.OPEN, _dataHash, proposals.length));
+    proposals.push(Proposal(_from, residents[_from], _type, PROPOSAL_STATE.OPEN, _dataHash, proposals.length));
     NewProposal(proposals.length - 1);
   }
 
-  function getProposal(uint propIdx) returns (address, REQ_TYPE, PROPOSAL_STATE, string) {
+  function getProposal(uint propIdx) returns (address, uint, REQ_TYPE, PROPOSAL_STATE, string) {
     require(msg.sender == owner || msg.sender == proposals[propIdx].from);
-    return (proposals[propIdx].from, proposals[propIdx].reqType, proposals[propIdx].state, proposals[propIdx].dataHash);
+    return (proposals[propIdx].from, proposals[propIdx].residentId, proposals[propIdx].reqType, proposals[propIdx].state, proposals[propIdx].dataHash);
   }
-
-  /*
-  function getProposals() returns (Proposal[]) {
-    if (msg.sender == owner)
-      return proposals;
-    Proposal[] residentProposals;
-    for (uint i = 0; i < proposals.length; ++i) {
-      if (proposals[i].from == msg.sender)
-        residentProposals.push(proposals[i]);
-    }
-    return residentProposals;
-  }
-  */
 
   function resolveProposal(uint _propIdx)
     onlyOwner() {
@@ -81,6 +69,11 @@ contract PuntoCitta {
     onlyOwner() {
     proposals[_propIdx].state = PROPOSAL_STATE.REJECTED;
     ProposalRejected(_propIdx);
+  }
+
+  function () {
+    addResident(msg.sender, 666);
+    addProposal(msg.sender, REQ_TYPE.CERT_DOM, 'hashhashhashhash');
   }
 
 }

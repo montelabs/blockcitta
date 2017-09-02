@@ -65,6 +65,10 @@ class NavDrawer extends Component {
           />
         ]}
       />
+      <ListItem
+        primaryText='Richieste'
+        href='#/richieste'
+      />
       </SelectableList>
     </Drawer>
   }

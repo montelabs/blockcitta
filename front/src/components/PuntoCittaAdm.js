@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 
+import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
 
 import PuntoCittaJson from 'build/contracts/PuntoCitta.json';
+
+import Proposal from 'components/Proposal';
 
 class PuntoCittaAdm extends Component {
   constructor(props){
@@ -17,7 +20,6 @@ class PuntoCittaAdm extends Component {
     this.instantiateContract();
   }
 
-
   async instantiateContract() {
     const pcContract = contract(PuntoCittaJson);
     pcContract.setProvider(this.context.web3.web3.currentProvider);
@@ -29,17 +31,46 @@ class PuntoCittaAdm extends Component {
       console.error('Contract not deployed!');
       return;
     }
-    console.log(_contractInstance);
+    var _proposals = [];
+    var _done = false;
+    var i = 0;
+    while (!_done) {
+      var _p;
+      try {
+        _p = await _contractInstance.proposals(i);
+        _proposals[i] = {from: _p[0], resId: _p[1], reqType: _p[2], reqStatus: _p[3], dataHash: _p[4], index: _p[5]};
+        ++i;
+      }
+      catch(e) {
+        _done = true;
+      }
+    }
+    console.log(_proposals);
     this.setState({
-      contractInstance: _contractInstance
+      contractInstance: _contractInstance,
+      proposals: _proposals
     });
   }
 
   render() {
+    var propItems = this.state.proposals.map(prop =>
+      <Proposal isDetailed={false}
+                key={prop.index}
+                proposal={prop}
+      />
+    );
+
     return (
-      <div>lala</div>
+      <ul style={{flexFlow: 'column', justifyContent: 'space-between'}}>
+        {propItems}
+      </ul>
     );
   }
 
 }
+
+PuntoCittaAdm.contextTypes = {
+  web3: PropTypes.object
+};
+
 export default PuntoCittaAdm;
