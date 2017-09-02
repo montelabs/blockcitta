@@ -10,7 +10,6 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 import QrReader from 'react-qr-reader';
-import QRCodeWriter from './qrcodeC/src';
 import {keccak256} from 'js-sha3';
 
 import Printer from 'components/Printer';
@@ -30,7 +29,7 @@ class ResidenceCertificate extends Component {
       qrCodeDelay: 200,
       contractInstance: null,
       name: '',
-      birthDate: {},
+      birthDate: null,
       sex: '',
       address: '',
       email: '',
@@ -231,15 +230,9 @@ class ResidenceCertificate extends Component {
   render(){
     const {type, newOrVerify} = this.props.params;
     console.log('Type:', type, 'newOrVerify:', newOrVerify);
-
     return (
       <div>
         <div id="react-no-print">
-          <QRCodeWriter
-          size= {200}
-          value='Dante-02.09.2017-M-Via 0, 6830, Chiasso' 
-          shiftTiles={3}
-          />
           <GridList
             style={ResidenceCertificate.gridListStyle}
             cellHeight={'auto'}
@@ -298,11 +291,12 @@ class ResidenceCertificate extends Component {
           <this.getQRCode/>
           <this.VerifyStatusDialog />
         </div>
-        <Printer 
+        <Printer
           name={this.state.name}
           sex={this.state.sex}
-          birthDate={this.state.birthDate}
+          birthDate={(this.state.birthDate !== null) ? this.formatDate(this.state.birthDate) : null}
           address={this.state.address}
+          encodedString={'Dante-02.09.2017-M-Via 0, 6830, Chiasso'}
         />
       </div>
     )

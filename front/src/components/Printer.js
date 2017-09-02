@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PrintTemplate from 'react-print';
+import QRCodeWriter from './qrcodeC/src';
 
 class Printer extends Component {
   constructor(props){
@@ -9,9 +10,8 @@ class Printer extends Component {
   }
 
   render() {
-    const {name, birthday, sex, address, qrCode } = this.props;
-    console.log(name, birthday, sex, address);
-
+    const {name, birthDate, sex, address, encodedString } = this.props;
+    console.log('name', name, 'bday', birthDate, 'sex', sex, 'addr', address);
     return (
       <PrintTemplate>
         <div style={{marginLeft:-210}}>
@@ -21,12 +21,16 @@ class Printer extends Component {
           </h3>
           <p>
             Nome: {name}<br />
-            Nato il: {birthday}<br />
+            Nato il: {birthDate}<br />
             sesso: {(sex === 'M') ? 'maschile' : 'feminile'}<br />
             Indirizo: Via {address}<br />
             La validità di questo documento deve venire atestata con
-            il QRCode <qrCode />
-          </p>
+            il QRCode: </p>
+            <QRCodeWriter
+              size= {200}
+              value={encodedString} 
+              shiftTiles={3}
+              />
         </div>
       </PrintTemplate>
     )
