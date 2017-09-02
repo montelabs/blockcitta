@@ -92,11 +92,11 @@ class QRCode extends React.Component {
       var scale =
         (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
       canvas.height = canvas.width = (size * scale);
-      console.log('canvas', size*scale, shiftTiles*tileH)
+      console.log('canvas', scale, size*scale, shiftTiles*tileH)
       let oldHeight = canvas.height;
       let oldWidth = canvas.width;
-      canvas.height += 4*shiftTiles*tileH;
-      canvas.width += 4*shiftTiles*tileW;
+      canvas.height += 2*scale*shiftTiles*tileH;
+      canvas.width += 2*scale*shiftTiles*tileW;
       ctx.scale(scale, scale);
       ctx.fillStyle = 'white'
 
