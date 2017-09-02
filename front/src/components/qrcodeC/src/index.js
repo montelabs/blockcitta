@@ -31,6 +31,7 @@ type Props = {
   level: $Keys<typeof ErrorCorrectLevel>,
   bgColor: string,
   fgColor: string,
+  shiftTiles: number
 };
 
 class QRCode extends React.Component {
@@ -67,7 +68,10 @@ class QRCode extends React.Component {
   }
 
   update() {
-    var {value, size, level, bgColor, fgColor} = this.props;
+
+    var {value, size, level, bgColor, fgColor, shiftTiles} = this.props;
+    if (shiftTiles === undefined)
+      shiftTiles = 2;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -90,8 +94,10 @@ class QRCode extends React.Component {
       var scale =
         (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
       canvas.height = canvas.width = (size * scale);
-      canvas.height += 100;
-      canvas.width += 100;
+      let oldHeight = canvas.height;
+      let oldWidth = canvas.width;
+      canvas.height += 4*shiftTiles*tileH;
+      canvas.width += 4*shiftTiles*tileW;
       console.log(canvas.height, canvas.width)
       ctx.scale(scale, scale);
       ctx.fillStyle = 'white'
@@ -99,8 +105,8 @@ class QRCode extends React.Component {
       ctx.fillRect(
         Math.round(0),
         Math.round(0),
-        400,
-        400
+        oldHeight,
+        oldWidth
       );
       cells.forEach(function(row, rdx) {
         row.forEach(function(cell, cdx) {
@@ -109,8 +115,8 @@ class QRCode extends React.Component {
           var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
           ctx &&
             ctx.fillRect(
-              Math.round(cdx * tileW + 28),
-              Math.round(rdx * tileH + 28),
+              Math.round(cdx * tileW + shiftTiles*tileW),
+              Math.round(rdx * tileH + shiftTiles*tileH),
               w,
               h
             );
