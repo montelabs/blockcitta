@@ -1,0 +1,14 @@
+{
+  "contract_name": "PuntoCitta",
+  "abi": [],
+  "unlinked_binary": "0x",
+  "networks": {
+    "3": {
+      "updated_at": 0
+    },
+    "42": {
+      "updated_at": 0
+    }
+  },
+  "schema_version": "0.0.5"
+}
