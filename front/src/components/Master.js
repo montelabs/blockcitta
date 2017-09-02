@@ -184,7 +184,7 @@ class Master extends Component {
           style={styles.appBar}
           showMenuIconButton={false}
         />
-          <div style={{marginTop: 73}}>
+          <div style={{marginTop: 73, marginLeft:60}}>
             {children}
           </div>
         </div>
