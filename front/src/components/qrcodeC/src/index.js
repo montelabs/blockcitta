@@ -103,8 +103,8 @@ class QRCode extends React.Component {
       ctx.fillRect(
         Math.round(0),
         Math.round(0),
-        oldHeight,
-        oldWidth
+        oldHeight + 2*scale*shiftTiles*tileH,
+        oldWidth + 2*scale*shiftTiles*tileW
       );
       cells.forEach(function(row, rdx) {
         row.forEach(function(cell, cdx) {
