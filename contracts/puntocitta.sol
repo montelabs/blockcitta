@@ -19,9 +19,9 @@ contract PuntoCitta {
     uint index;
   }
 
-  address owner;
+  address public owner;
   mapping (address => uint) residents;
-  Proposal[] proposals;
+  Proposal[] public proposals;
  
   modifier onlyOwner() {
     require(msg.sender == owner);
@@ -33,6 +33,7 @@ contract PuntoCitta {
     _;
   }
 
+  event NewProposal(uint propIdx);
   event ProposalResolved(uint propIdx);
   event ProposalRejected(uint propIdx);
 
@@ -49,14 +50,13 @@ contract PuntoCitta {
     onlyResident(_from) {
     require(msg.sender == _from);
     proposals.push(Proposal(_from, _type, PROPOSAL_STATE.OPEN, _dataHash, proposals.length));
+    NewProposal(proposals.length - 1);
   }
 
-  /*
   function getProposal(uint propIdx) returns (address, REQ_TYPE, PROPOSAL_STATE, string) {
     require(msg.sender == owner || msg.sender == proposals[propIdx].from);
     return (proposals[propIdx].from, proposals[propIdx].reqType, proposals[propIdx].state, proposals[propIdx].dataHash);
   }
-  */
 
   /*
   function getProposals() returns (Proposal[]) {
