@@ -34,7 +34,9 @@ class ResidenceCertificate extends Component {
       address: '',
       email: '',
       verifyHappened: false,
-      verifyMsg: ''
+      verifyMsg: '',
+
+      sentRequest: false
     }
     this.handleScan = this.handleQRCodeScan.bind(this)
   }
@@ -113,9 +115,11 @@ class ResidenceCertificate extends Component {
     this.state.contractInstance.addRequest(0, this.dataString(),
           { from: this.context.web3.web3.eth.defaultAccount })
     .then(() => {
+      this.setState({ sentRequest: true });
       console.log('Request added');
     })
     .catch(err => {
+      this.setState({ sentRequest: false });
       console.log('Error sending request: ' + err);
     })
   }
