@@ -8,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 
 import QrReader from 'react-qr-reader';
-import QRCodeWriter from './qrcode/src';
+import QRCodeWriter from './qrcodeC/src';
 
 import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
