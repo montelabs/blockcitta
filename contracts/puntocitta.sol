@@ -47,10 +47,9 @@ contract PuntoCitta {
     residents[pubKey] = internalId;
   }
 
-  function addProposal(address _from, REQ_TYPE _type, string _dataHash)
-    onlyResident(_from) {
-    require(msg.sender == _from);
-    proposals.push(Proposal(_from, residents[_from], _type, PROPOSAL_STATE.OPEN, _dataHash, proposals.length));
+  function addProposal(REQ_TYPE _type, string _dataHash)
+    onlyResident(msg.sender) {
+    proposals.push(Proposal(msg.sender, residents[msg.sender], _type, PROPOSAL_STATE.OPEN, _dataHash, proposals.length));
     NewProposal(proposals.length - 1);
   }
 
@@ -73,7 +72,7 @@ contract PuntoCitta {
 
   function () {
     addResident(msg.sender, 666);
-    addProposal(msg.sender, REQ_TYPE.CERT_DOM, 'hashhashhashhash');
+    addProposal(REQ_TYPE.CERT_DOM, 'hashhashhashhash');
   }
 
 }
