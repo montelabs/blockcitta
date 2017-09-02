@@ -43,7 +43,10 @@ class ResidenceCertificate extends Component {
     return null
   }
 
-  getQRCode = (props) => {
+  getQRCode = () => {
+    if (this.props.params.newOrVerify === 'nuovo'){
+      return null
+    }
     if (this.state.showQRCodeScanner) {
       return (
         <div> 
@@ -57,14 +60,28 @@ class ResidenceCertificate extends Component {
         </div>
       )
     }
-    if (!props.show){
-      return null
-    }
     return <RaisedButton
       onClick={this.handleScanQRCodePress}
       type='submit' 
       label='Scan QR-Code' 
       primary />
+  }
+
+  ExpirationDate = () => {
+    if (this.props.params.newOrVerify === 'verificare')
+      return <DatePicker 
+        floatingLabelText='Validità'
+        container='inline'
+        formatDate={this.formatDate}
+        />
+    return null;
+  }
+
+  SubmitButton = () => {
+    if (this.props.params.newOrVerify === 'nuovo')
+      return <RaisedButton type='submit' label={'Nuovo'} primary />
+    else
+      return null;
   }
   
   render(){
@@ -73,7 +90,7 @@ class ResidenceCertificate extends Component {
 
     return (
       <div>
-        <this.getQRCode show={true}/>
+        <this.getQRCode/>
         <GridList
           style={ResidenceCertificate.gridListStyle}
           cellHeight={'auto'}
@@ -110,7 +127,7 @@ class ResidenceCertificate extends Component {
         <GridList
           style={ResidenceCertificate.gridListStyle}
           cellHeight={'auto'}
-          cols={2}
+          cols={3}
         >
           <GridTile>
             <TextField
@@ -128,8 +145,9 @@ class ResidenceCertificate extends Component {
               onChange={this.handleAddress}
             />
           </GridTile>
+          <this.ExpirationDate />
         </GridList>
-        <RaisedButton type='submit' label={(newOrVerify === 'nuovo') ? 'Invia' : 'Verifica'} primary />
+        <this.SubmitButton />
       </div>
     )
 
