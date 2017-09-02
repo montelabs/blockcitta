@@ -45,7 +45,7 @@ contract PuntoCitta {
   }
 
   event NewRequest(uint propIdx);
-  event RequestResolved(uint propIdx);
+  event RequestResolved(uint propIdx, string validHash);
   event RequestRejected(uint propIdx);
   event NewLawProposal(uint propIdx);
 
@@ -87,7 +87,7 @@ contract PuntoCitta {
     onlyOwner() {
     requests[_propIdx].state = PROPOSAL_STATE.RESOLVED;
     validHashes[validHash] = true;
-    RequestResolved(_propIdx);
+    RequestResolved(_propIdx, validHash);
   }
 
   function rejectRequest(uint _propIdx)

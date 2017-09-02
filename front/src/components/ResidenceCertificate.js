@@ -66,7 +66,7 @@ class ResidenceCertificate extends Component {
 
   dataString = () => {
     var _data = this.state.name + ' / ' +
-                this.state.birthDate + ' / ' +
+                this.formatDate(this.state.birthDate) + ' / ' +
                 this.state.sex + ' / ' +
                 this.state.address + ' / ' +
                 this.state.email;
@@ -76,8 +76,12 @@ class ResidenceCertificate extends Component {
   verify = () => {
     if (this.state.contractInstance === null)
       return;
-    var hash = keccak256(this.dataString());
-    console.log(this.dataString());
+    var hash;
+    try {
+      hash = keccak256(this.dataString());
+    } catch(e) {
+      return;
+    }
     this.state.contractInstance.verify(hash,
           { from: this.context.web3.web3.eth.defaultAccount })
     .then((res) => {
@@ -93,13 +97,13 @@ class ResidenceCertificate extends Component {
     if (this.state.contractInstance === null)
       return;
 
-    this.state.contractInstance.addProposal(0, this.dataString(),
+    this.state.contractInstance.addRequest(0, this.dataString(),
           { from: this.context.web3.web3.eth.defaultAccount })
     .then(() => {
-      console.log('Proposal added');
+      console.log('Request added');
     })
     .catch(err => {
-      console.log('Error sending proposal: ' + err);
+      console.log('Error sending request: ' + err);
     })
   }
 
