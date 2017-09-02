@@ -6,7 +6,6 @@ import Master from 'components/Master';
 
 const Routes = (
   <Route path='/' component={Master}> 
-    <IndexRedirect to="/" />
   </Route>
 );
 

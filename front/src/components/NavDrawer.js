@@ -24,7 +24,7 @@ class NavDrawer extends Component {
     return <Drawer
       open={true}
       docked={true}
-      onRequestChange={onRequestChangeNavDrawer}
+      //onRequestChange={onRequestChangeNavDrawer}
       containerStyle={{zIndex: zIndex.drawer - 100}}
     >
       <AppBar
@@ -32,14 +32,8 @@ class NavDrawer extends Component {
         showMenuIconButton={false} />
       <SelectableList
         value={location.pathname}
-        onChange={onChangeList}
+        //onChange={onChangeList}
       >
-        <ListItem 
-          primaryText='FAQ'
-          value='/faq'
-          href='#/faq'
-          />
-        </ListItem>
       </SelectableList>
     </Drawer>
   }
