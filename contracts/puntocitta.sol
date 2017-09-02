@@ -33,8 +33,8 @@ contract PuntoCitta {
     _;
   }
 
-  event ProposalResolved(Proposal);
-  event ProposalRejected(Proposal);
+  event ProposalResolved(uint propIdx);
+  event ProposalRejected(uint propIdx);
 
   function PuntoCitta() {
     owner = msg.sender;
@@ -48,10 +48,18 @@ contract PuntoCitta {
   function addProposal(address _from, REQ_TYPE _type, string _dataHash)
     onlyResident(_from) {
     require(msg.sender == _from);
-    proposals.push(Proposal(_from, _type, PROPOSAL_STATE.open, _dataHash, proposals.length));
+    proposals.push(Proposal(_from, _type, PROPOSAL_STATE.OPEN, _dataHash, proposals.length));
   }
 
-  function getProposals() {
+  /*
+  function getProposal(uint propIdx) returns (address, REQ_TYPE, PROPOSAL_STATE, string) {
+    require(msg.sender == owner || msg.sender == proposals[propIdx].from);
+    return (proposals[propIdx].from, proposals[propIdx].reqType, proposals[propIdx].state, proposals[propIdx].dataHash);
+  }
+  */
+
+  /*
+  function getProposals() returns (Proposal[]) {
     if (msg.sender == owner)
       return proposals;
     Proposal[] residentProposals;
@@ -61,17 +69,18 @@ contract PuntoCitta {
     }
     return residentProposals;
   }
+  */
 
   function resolveProposal(uint _propIdx)
     onlyOwner() {
     proposals[_propIdx].state = PROPOSAL_STATE.RESOLVED;
-    ProposalResolved(proposals[_propIdx]);
+    ProposalResolved(_propIdx);
   }
 
   function rejectProposal(uint _propIdx)
     onlyOwner() {
     proposals[_propIdx].state = PROPOSAL_STATE.REJECTED;
-    ProposalRejected(proposals[_propIdx]);
+    ProposalRejected(_propIdx);
   }
 
 }
