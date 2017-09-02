@@ -63,7 +63,7 @@ class NewCertificate extends Component {
             </GridTile>
             <GridTile>
               <DatePicker
-                hintText='Data di nascita'
+                floatingLabelText='Data di nascita'
                 container='inline'
                 formatDate={this.formatDate}
               />
