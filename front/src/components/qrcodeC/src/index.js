@@ -92,7 +92,14 @@ class QRCode extends React.Component {
       canvas.height = canvas.width = (size * scale);
       console.log(canvas.height, canvas.width)
       ctx.scale(scale, scale);
+      ctx.fillStyle = 'white'
 
+      ctx.fillRect(
+        Math.round(0),
+        Math.round(0),
+        400,
+        400
+      );
       cells.forEach(function(row, rdx) {
         row.forEach(function(cell, cdx) {
           ctx && (ctx.fillStyle = cell ? fgColor : bgColor);
@@ -100,8 +107,8 @@ class QRCode extends React.Component {
           var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
           ctx &&
             ctx.fillRect(
-              Math.round(cdx * tileW),
-              Math.round(rdx * tileH),
+              Math.round(cdx * tileW + 28),
+              Math.round(rdx * tileH + 28),
               w,
               h
             );
