@@ -77,7 +77,7 @@ class NavDrawer extends Component {
     </Drawer>
   }
   render() {
-    return <this.Navigations />
+    return <div id="react-no-print"> <this.Navigations /> </div>
   }
 }
 

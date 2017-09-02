@@ -13,6 +13,8 @@ import QrReader from 'react-qr-reader';
 import QRCodeWriter from './qrcodeC/src';
 import {keccak256} from 'js-sha3';
 
+import Printer from 'components/Printer';
+
 import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
 
@@ -228,68 +230,76 @@ class ResidenceCertificate extends Component {
 
     return (
       <div>
-        <QRCodeWriter
-        size= {200}
-        value='Dante-02.09.2017-M-Via 0, 6830, Chiasso' 
-        shiftTiles={3}
-        />
-        <GridList
-          style={ResidenceCertificate.gridListStyle}
-          cellHeight={'auto'}
-          cols={3}
-        >
-          <GridTile>
-            <TextField
-              value={this.state.name}
-              fullWidth={true}
-              name='fullname'
-              floatingLabelText='Nome Completto'
-              onChange={this.handleFullNameChange}
-            />
-          </GridTile>
-          <GridTile>
-            <DatePicker
-              value={this.state.birthDate}
-              floatingLabelText='Data di nascita'
-              container='inline'
-              formatDate={this.formatDate}
-              onChange={this.handleDate}
-            />
-          </GridTile>
-          <GridTile>
-            <SelectField
-              floatingLabelText='Sesso'
-              value={this.state.sex}
-              onChange={this.handleSexChange}
-              style={{width:100}}
-            >
-              <MenuItem value={'M'} primaryText='M'/>
-              <MenuItem value={'F'} primaryText='F'/>
-            </SelectField>
-          </GridTile>
-        </GridList>
+        <div id="react-no-print">
+          <QRCodeWriter
+          size= {200}
+          value='Dante-02.09.2017-M-Via 0, 6830, Chiasso' 
+          shiftTiles={3}
+          />
+          <GridList
+            style={ResidenceCertificate.gridListStyle}
+            cellHeight={'auto'}
+            cols={3}
+          >
+            <GridTile>
+              <TextField
+                value={this.state.name}
+                fullWidth={true}
+                name='fullname'
+                floatingLabelText='Nome Completto'
+                onChange={this.handleFullNameChange}
+              />
+            </GridTile>
+            <GridTile>
+              <DatePicker
+                value={this.state.birthDate}
+                floatingLabelText='Data di nascita'
+                container='inline'
+                formatDate={this.formatDate}
+                onChange={this.handleDate}
+              />
+            </GridTile>
+            <GridTile>
+              <SelectField
+                floatingLabelText='Sesso'
+                value={this.state.sex}
+                onChange={this.handleSexChange}
+                style={{width:100}}
+              >
+                <MenuItem value={'M'} primaryText='M'/>
+                <MenuItem value={'F'} primaryText='F'/>
+              </SelectField>
+            </GridTile>
+          </GridList>
 
-        <GridList
-          style={ResidenceCertificate.gridListStyle}
-          cellHeight={'auto'}
-          cols={3}
-        >
-          <GridTile>
-            <TextField
-              fullWidth={true}
-              value={this.state.address}
-              name='address'
-              floatingLabelText='Indirizzo (via, CAP e località)'
-              onChange={this.handleAddress}
-            />
-          </GridTile>
-          <GridTile>
-            <this.Email />
-          </GridTile>
-        </GridList>
-        <this.SubmitButton />
-        <this.getQRCode/>
-        <this.VerifyStatusDialog />
+          <GridList
+            style={ResidenceCertificate.gridListStyle}
+            cellHeight={'auto'}
+            cols={3}
+          >
+            <GridTile>
+              <TextField
+                fullWidth={true}
+                value={this.state.address}
+                name='address'
+                floatingLabelText='Indirizzo (via, CAP e località)'
+                onChange={this.handleAddress}
+              />
+            </GridTile>
+            <GridTile>
+              <this.Email />
+            </GridTile>
+          </GridList>
+          <this.SubmitButton />
+          <this.getQRCode/>
+          <this.VerifyStatusDialog />
+        </div>
+        <Printer 
+          name={this.state.name}
+          sex={this.state.sex}
+          birthDate={this.state.birthDate}
+          address={this.state.address}
+        />
       </div>
     )
 
