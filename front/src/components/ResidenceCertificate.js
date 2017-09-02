@@ -146,7 +146,8 @@ class ResidenceCertificate extends Component {
         address: QRCodeData[3],
         qrCodeResult: data,
         showQRCodeScanner: false
-      })
+      });
+      this.verify();
     }
   }
 
