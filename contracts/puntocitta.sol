@@ -23,6 +23,7 @@ contract PuntoCitta {
   address public owner;
   mapping (address => uint) residents;
   Proposal[] public proposals;
+  mapping (string => bool) validHashes;
  
   modifier onlyOwner() {
     require(msg.sender == owner);
@@ -58,9 +59,14 @@ contract PuntoCitta {
     return (proposals[propIdx].from, proposals[propIdx].residentId, proposals[propIdx].reqType, proposals[propIdx].state, proposals[propIdx].dataHash);
   }
 
-  function resolveProposal(uint _propIdx)
+  function verify(string testHash) {
+    return validHashes[testHash];
+  }
+
+  function resolveProposal(uint _propIdx, string validHash)
     onlyOwner() {
     proposals[_propIdx].state = PROPOSAL_STATE.RESOLVED;
+    validHashes[validHash] = true;
     ProposalResolved(_propIdx);
   }
 

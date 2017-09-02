@@ -138,7 +138,7 @@ class ResidenceCertificate extends Component {
 
   SubmitButton = () => {
     if (this.props.params.newOrVerify === 'nuovo')
-      return <RaisedButton onTouchTap={() => this.sendRequest()} type='submit' label={'Nuovo'} primary />
+      return <RaisedButton onTouchTap={() => this.sendRequest()} type='submit' label={'Invia'} primary />
     return null;
   }
 

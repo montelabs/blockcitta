@@ -16,6 +16,7 @@
     "form-schema-validation": "^1.6.0",
     "glob": "^7.1.2",
     "history": "^2.0.0",
+    "js-sha3": "^0.6.1",
     "lodash": "^4.17.4",
     "material-ui": "^0.18.6",
     "moment": "^2.18.1",
