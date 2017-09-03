@@ -70,8 +70,24 @@ class NavDrawer extends Component {
         href='#/richieste'
       />
       <ListItem
-        primaryText='Inserire'
+        primaryText='Inserire residente'
         href='#/inserire'
+      />
+      <ListItem
+        primaryTogglesNestedList={true}
+        primaryText='Proposte di legge'
+        nestedItems={[
+          <ListItem key='lista'
+            primaryTogglesNestedList={true}
+            primaryText='Lista'
+            href='#/legge/lista'
+          />,
+          <ListItem key='nuova'
+            primaryTogglesNestedList={true}
+            primaryText='Nuova'
+            href='#/legge/nuova'
+          />
+        ]}
       />
       </SelectableList>
     </Drawer>

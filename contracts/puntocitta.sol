@@ -22,6 +22,7 @@ contract PuntoCitta {
 
   struct LawProposal {
     address from;
+    string title;
     string description;
     uint signatures;
     uint index;
@@ -47,7 +48,8 @@ contract PuntoCitta {
   event NewRequest(uint propIdx);
   event RequestResolved(uint propIdx, string validHash);
   event RequestRejected(uint propIdx);
-  event NewLawProposal(uint propIdx);
+  event NewLawProposal(uint lawPropIdx);
+  event NewSignature(uint lawPropIdx, address from);
 
   function PuntoCitta() {
     owner = msg.sender;
@@ -65,10 +67,10 @@ contract PuntoCitta {
     NewRequest(l);
   }
 
-  function addLawProposal(string _desc)
+  function addLawProposal(string _title, string _desc)
     onlyResident(msg.sender) {
     uint l = lawProposals.length;
-    lawProposals.push(LawProposal(msg.sender, _desc, 0, l));
+    lawProposals.push(LawProposal(msg.sender, _title, _desc, 0, l));
     NewLawProposal(l);
   }
 
@@ -77,6 +79,11 @@ contract PuntoCitta {
     require(signedLawProposal[index][msg.sender] == false);
     signedLawProposal[index][msg.sender] = true;
     lawProposals[index].signatures++;
+    NewSignature(index, msg.sender);
+  }
+
+  function hasSigned(address from, uint index) constant returns (bool) {
+    return signedLawProposal[index][from];
   }
   
   function verify(string testHash) constant returns (bool) {
