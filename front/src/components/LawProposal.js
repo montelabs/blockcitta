@@ -69,10 +69,10 @@ class LawProposal extends Component {
     this.state.contractInstance.signLawProposal(this.props.lawProposal.index,
           {from : this.context.web3.web3.eth.defaultAccount})
     .then(() => {
-      this.setState({ signed: true, sentRequest: 2, snackMsg: 'Signed' });
+      this.setState({ signed: true, sentRequest: 2, snackMsg: 'Firmato' });
     })
     .catch(err => {
-      this.setState({ sentRequest: 3, snackMsg: 'Error: could not sign' });
+      this.setState({ sentRequest: 3, snackMsg: 'Errore: non firmato' });
       console.log('Error in signing law proposal: ' + err);
     });
   }

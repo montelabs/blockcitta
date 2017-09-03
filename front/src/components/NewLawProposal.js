@@ -32,11 +32,11 @@ class NewLawProposal extends Component {
     this.state.contractInstance.addLawProposal(this.state.title, this.state.description,
           { from: this.context.web3.web3.eth.defaultAccount })
     .then(() => {
-      this.setState({ sentRequest: 2, snackMsg: 'Law proposal added' });
+      this.setState({ sentRequest: 2, snackMsg: 'Iniziativa popolare aggiunta' });
       console.log('Law proposal added');
     })
     .catch(err => {
-      this.setState({ sentRequest: 3, snackMsg: 'Error: could not add law proposal' });
+      this.setState({ sentRequest: 3, snackMsg: 'Errore: iniziativa popolare non aggiunta' });
       console.log('Error adding law proposal: ' + err);
     })
   }

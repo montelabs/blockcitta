@@ -101,7 +101,7 @@ class ResidenceCertificate extends Component {
     console.log(hash);
     this.state.contractInstance.verify(hash)
     .then(res => {
-      var _msg = res ? 'This certificate is valid!' : 'This certificate is not valid!';
+      var _msg = res ? 'Questo certificato è valido!' : 'Questo certificato non è valido!';
       this.setState({ verifyHappened: true, verifyMsg: _msg });
     })
     .catch(err => {

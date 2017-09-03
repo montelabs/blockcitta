@@ -118,11 +118,11 @@ class Request extends Component {
       { from: this.context.web3.web3.eth.defaultAccount }
     )
     .then(() => {
-      this.setState({ sentRequestFalse: 2, snackMsgFalse: 'Request rejected' });
+      this.setState({ sentRequestFalse: 2, snackMsgFalse: 'Richiesta rifiutata' });
       console.log('Request rejected');
     })
     .catch(err => {
-      this.setState({ sentRequestFalse: 3, snackMsgFalse: 'Error: request could not be rejected' });
+      this.setState({ sentRequestFalse: 3, snackMsgFalse: 'Errore: richiesta non rifiutata' });
       console.log('Error in rejecting request');
     });
 
@@ -143,11 +143,11 @@ class Request extends Component {
       { from: this.context.web3.web3.eth.defaultAccount }
     )
     .then(() => {
-      this.setState({ sentRequestOk: 2, snackMsgOk: 'Request resolved' });
+      this.setState({ sentRequestOk: 2, snackMsgOk: 'Richiesta risolta' });
       console.log('Request resolved');
     })
     .catch(err => {
-      this.setState({ sentRequestOk: 3, snackMsgOk: 'Error: request could not be resolved' });
+      this.setState({ sentRequestOk: 3, snackMsgOk: 'Errore: richiesta non risolta' });
       console.log('Error in resolving request');
     });
   }

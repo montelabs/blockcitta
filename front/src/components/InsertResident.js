@@ -32,11 +32,11 @@ class InsertResident extends Component {
     this.state.contractInstance.addResident(this.state.pubKey, this.state.resId,
           { from: this.context.web3.web3.eth.defaultAccount })
     .then(() => {
-      this.setState({ sentRequest: 2, snackMsg: 'Resident added' });
+      this.setState({ sentRequest: 2, snackMsg: 'Residente aggiunto' });
       console.log('Resident added');
     })
     .catch(err => {
-      this.setState({ sentRequest: 3, snackMsg: 'Error: could not add resident' });
+      this.setState({ sentRequest: 3, snackMsg: 'Errore: residente non aggiunto' });
       console.log('Error adding resident: ' + err);
     })
   }
