@@ -88,7 +88,7 @@ class NewLawProposal extends Component {
         >
           <GridTile>
             <TextField
-              value={this.state.pubKey}
+              value={this.state.title}
               fullWidth={true}
               name='title'
               floatingLabelText='Titolo'
