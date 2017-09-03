@@ -1,6 +1,14 @@
 import React, { Component } from 'react'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn,
+} from 'material-ui/Table';
 
 import {keccak256} from 'js-sha3';
 import lodash from 'lodash';
@@ -13,9 +21,14 @@ import {instantiateContract} from 'utils/contract';
 class Request extends Component {
   constructor(props) {
     super(props);
+    var _data = props.request.dataHash.split('/');
     this.state = {
       isExpanded: false,
-      contractInstance: null
+      contractInstance: null,
+      name: _data[0],
+      birthDate: _data[1],
+      sex: _data[2],
+      address: _data[3]
     }
   }
 
@@ -125,7 +138,18 @@ class Request extends Component {
           subtitle={this.ResId()}
         />
         <CardText expandable={true}>
-          Dati: {this.props.request.dataHash}
+          <Table selectable={false}>
+            <TableBody displayRowCheckbox={false}>
+              <TableRow displayBorder={false}>
+                <TableRowColumn style={{fontSize: 16}}>Nome: {this.state.name}</TableRowColumn>
+                <TableRowColumn style={{fontSize: 16}}>Data di Nascita: {this.state.birthDate}</TableRowColumn>
+                <TableRowColumn style={{fontSize: 16}}>Sesso: {this.state.sex}</TableRowColumn>
+              </TableRow>
+              <TableRow displayBorder={false}>
+                <TableRowColumn colSpan='3' style={{fontSize: 16}}>Indirizzo: {this.state.address}</TableRowColumn>
+              </TableRow>
+            </TableBody>
+          </Table>
         </CardText>
         <this.ActionButtons />
       </Card>
