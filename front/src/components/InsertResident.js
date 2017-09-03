@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import {GridList, GridTile} from 'material-ui/GridList';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
+import Snackbar from 'material-ui/Snackbar';
 
 import PropTypes from 'prop-types'
 import contract from 'truffle-contract';
@@ -17,20 +19,24 @@ class InsertResident extends Component {
     this.state = {
       contractInstance: null,
       pubKey: '',
-      resId: ''
+      resId: '',
+      sentRequest: 0,
+      snackMsg: ''
     }
   }
 
   sendAdd = () => {
     if (this.state.contractInstance === null)
       return;
-
+    this.setState({ sentRequest: 1})
     this.state.contractInstance.addResident(this.state.pubKey, this.state.resId,
           { from: this.context.web3.web3.eth.defaultAccount })
     .then(() => {
+      this.setState({ sentRequest: 2, snackMsg: 'Resident added' });
       console.log('Resident added');
     })
     .catch(err => {
+      this.setState({ sentRequest: 3, snackMsg: 'Error: could not add resident' });
       console.log('Error adding resident: ' + err);
     })
   }
@@ -50,6 +56,8 @@ class InsertResident extends Component {
   };
 
   SubmitButton = () => {
+    if (this.state.sentRequest === 1)
+      return <CircularProgress />
     return <RaisedButton onTouchTap={() => this.sendAdd()} type='submit' label={'Invia'} primary />
   }
 
@@ -64,6 +72,10 @@ class InsertResident extends Component {
   static gridListStyle = {
     marginTop:10,
   };
+
+  handleSnackClose = () => {
+    this.setState({ sentRequest: 0});
+  }
 
   render(){
     return (
@@ -93,6 +105,12 @@ class InsertResident extends Component {
           </GridTile>
         </GridList>
         <this.SubmitButton />
+        <Snackbar
+          open={this.state.sentRequest > 1}
+          message={this.state.snackMsg}
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackClose}
+        />
       </div>
     )
   }

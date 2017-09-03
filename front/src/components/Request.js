@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
+import Snackbar from 'material-ui/Snackbar';
 import {
   Table,
   TableBody,
@@ -28,7 +30,11 @@ class Request extends Component {
       name: _data[0],
       birthDate: _data[1],
       sex: _data[2],
-      address: _data[3]
+      address: _data[3],
+      sentRequestFalse: 0,
+      sentRequestOk: 0,
+      snackMsgFalse: '',
+      snackMsgOk: ''
     }
   }
 
@@ -62,6 +68,34 @@ class Request extends Component {
     return _i;
   }
 
+  ButtonFalse = () => {
+    if (this.state.sentRequestFalse === 1)
+      return <CircularProgress style={{margin: 20}}/>
+
+    return (
+      <RaisedButton
+        style={{margin: 20}}
+        label="Falso"
+        secondary={true}
+        onTouchTap={() => this.rejectRequest()}
+      />
+    );
+  }
+
+  ButtonOk = () => {
+    if (this.state.sentRequestOk === 1)
+      return <CircularProgress style={{margin: 20}}/>
+
+    return (
+      <RaisedButton
+        style={{margin: 20}}
+        label="Tutto OK"
+        primary={true}
+        onTouchTap={() => this.resolveRequest()}
+      />
+    );
+  }
+
   ActionButtons = () => {
     if (!this.state.isExpanded)
       return null;
@@ -70,32 +104,25 @@ class Request extends Component {
       <div
         style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
       >
-        <RaisedButton
-          style={{margin: 20}}
-          label="Falso"
-          secondary={true}
-          onTouchTap={() => this.rejectRequest()}
-        />
-        <RaisedButton
-          style={{margin: 20}}
-          label="Tutto OK"
-          primary={true}
-          onTouchTap={() => this.resolveRequest()}
-        />
+        <this.ButtonFalse />
+        <this.ButtonOk />
       </div>
     );
   }
 
   rejectRequest = () => {
     console.log('Reject');
+    this.setState({ sentRequestFalse: 1})
     this.state.contractInstance.rejectRequest(
       this.props.request.index,
       { from: this.context.web3.web3.eth.defaultAccount }
     )
     .then(() => {
+      this.setState({ sentRequestFalse: 2, snackMsgFalse: 'Request rejected' });
       console.log('Request rejected');
     })
     .catch(err => {
+      this.setState({ sentRequestFalse: 3, snackMsgFalse: 'Error: request could not be rejected' });
       console.log('Error in rejecting request');
     });
 
@@ -109,17 +136,24 @@ class Request extends Component {
     var _split = this.props.request.dataHash.split('/');
     var _data = _split[0] + '/' + _split[1] + '/' + _split[2] + '/' + _split[3];
     
+    this.setState({ sentRequestOk: 1})
     var hash = keccak256(_data);
     this.state.contractInstance.resolveRequest(
       this.props.request.index, hash,
       { from: this.context.web3.web3.eth.defaultAccount }
     )
     .then(() => {
+      this.setState({ sentRequestOk: 2, snackMsgOk: 'Request resolved' });
       console.log('Request resolved');
     })
     .catch(err => {
+      this.setState({ sentRequestOk: 3, snackMsgOk: 'Error: request could not be resolved' });
       console.log('Error in resolving request');
     });
+  }
+
+  handleSnackClose = () => {
+    this.setState({ sentRequestFalse: 0, sentRequestOk: 0});
   }
 
   render() {
@@ -152,6 +186,18 @@ class Request extends Component {
           </Table>
         </CardText>
         <this.ActionButtons />
+        <Snackbar
+          open={this.state.sentRequestFalse > 1}
+          message={this.state.snackMsgFalse}
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackClose}
+        />
+        <Snackbar
+          open={this.state.sentRequestOk > 1}
+          message={this.state.snackMsgOk}
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackClose}
+        />
       </Card>
     );
   }

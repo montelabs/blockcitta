@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
+import Snackbar from 'material-ui/Snackbar';
 import {
   Table,
   TableBody,
@@ -24,7 +26,9 @@ class LawProposal extends Component {
     this.state = {
       isExpanded: false,
       contractInstance: null,
-      signed: false
+      signed: false,
+      sentRequest: 0,
+      snackMsg: ''
     }
   }
 
@@ -61,12 +65,14 @@ class LawProposal extends Component {
   sign = () => {
     if (this.state.signed)
       return;
+    this.setState({ sentRequest: 1})
     this.state.contractInstance.signLawProposal(this.props.lawProposal.index,
           {from : this.context.web3.web3.eth.defaultAccount})
     .then(() => {
-      this.setState({ signed: true });
+      this.setState({ signed: true, sentRequest: 2, snackMsg: 'Signed' });
     })
     .catch(err => {
+      this.setState({ sentRequest: 3, snackMsg: 'Error: could not sign' });
       console.log('Error in signing law proposal: ' + err);
     });
   }
@@ -75,6 +81,14 @@ class LawProposal extends Component {
     if (!this.state.isExpanded)
       return null;
 
+    if (this.state.sentRequest === 1)
+      return (
+        <div
+          style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
+        >
+          <CircularProgress style={{margin:20}}/>
+        </div>
+      );
     return (
       <div
         style={{display: 'flex', flexDirection: 'row', justifyContent: 'center'}}
@@ -94,6 +108,10 @@ class LawProposal extends Component {
     return 'Firme: ' + this.props.lawProposal.signs.toString();
   }
 
+  handleSnackClose = () => {
+    this.setState({ sentRequest: 0});
+  }
+
   render() {
     return (
       <Card style={{marginRight: 80, marginBottom: 20}}
@@ -110,6 +128,12 @@ class LawProposal extends Component {
           {this.props.lawProposal.desc}
         </CardText> 
         <this.ActionButtons />
+        <Snackbar
+          open={this.state.sentRequest > 1}
+          message={this.state.snackMsg}
+          autoHideDuration={4000}
+          onRequestClose={this.handleSnackClose}
+        />
       </Card>
     );
   }
