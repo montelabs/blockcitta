@@ -21,6 +21,7 @@ class NavDrawer extends Component {
   }
 
   Navigations = () => {
+    const logo = require('assets/orion.jpeg');
     const {
       location,
       onRequestChangeNavDrawer,
@@ -48,7 +49,8 @@ class NavDrawer extends Component {
       containerStyle={{zIndex: zIndex.drawer - 100}}
     >
       <AppBar
-        title='BlockCitta'
+        //title={<div><img src={logo}/>Orion</div>}
+        title='ORION'
         showMenuIconButton={false} />
       <SelectableList
         value={location.pathname}
