@@ -213,10 +213,6 @@ class ResidenceCertificate extends Component {
     if (this.state.sentRequest === 1) {
       return <CircularProgress />
     }
-    // Success
-    else if (this.state.sentRequest === 2) {
-      return <RaisedButton style={{margin: 20}} onTouchTap={() => window.print()} label={'Stampa Certificato'} primary />
-    }
     if (this.props.params.newOrVerify === 'nuovo') {
       return <RaisedButton style={{margin: 20}} onTouchTap={() => this.sendRequest()} label={'Invia'} primary />
     }
@@ -315,6 +311,7 @@ class ResidenceCertificate extends Component {
             </GridTile>
           </GridList>
           <this.SubmitButton />
+          <RaisedButton style={{margin: 20}} onTouchTap={() => window.print()} label={'Stampa Certificato'} primary />
           <this.getQRCode/>
           <this.VerifyStatusDialog />
         </div>
