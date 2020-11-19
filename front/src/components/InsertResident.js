@@ -90,7 +90,7 @@ class InsertResident extends Component {
               value={this.state.pubKey}
               fullWidth={true}
               name='pubKey'
-              floatingLabelText='Chiave Pubblica'
+              floatingLabelText='ID Pubblico'
               onChange={this.handlePubKey}
             />
           </GridTile>
@@ -99,7 +99,7 @@ class InsertResident extends Component {
               value={this.state.resId}
               fullWidth={true}
               name='resId'
-              floatingLabelText='ID Residente'
+              floatingLabelText='AVS ID'
               onChange={this.handleResId}
             />
           </GridTile>
